@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="database_manager.UserControls.Item"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:database_manager.UserControls"
+             xmlns:converters="clr-namespace:database_manager.Converters"
+             mc:Ignorable="d" 
+             d:Height="25" Width="auto">
+    <Grid>
+        <ListView x:Name="FieldsInItem">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
+</UserControl>

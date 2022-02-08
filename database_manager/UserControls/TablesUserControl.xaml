@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="database_manager.UserControls.TablesListUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:database_manager.UserControls"
+             mc:Ignorable="d" Width="200" Height="500">
+    <Grid>
+        <ListBox x:Name="listboxTables" ItemsSource="{Binding Tables}" Margin="0,0,0,70"/>
+        <Button x:Name="buttonOpenSelectedTable" Content="Open selected table" HorizontalAlignment="Center" Margin="0,460,0,0" VerticalAlignment="Top" Height="40" Width="200"/>
+    </Grid>
+</UserControl>

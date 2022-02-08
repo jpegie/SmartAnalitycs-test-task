@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="database_manager.UserControls.FieldsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:data="clr-namespace:database_manager.Data"
+             xmlns:converters="clr-namespace:database_manager.Converters"
+             mc:Ignorable="d" 
+             Height="404" Width="300">
+
+    <UserControl.Resources>
+        <converters:FieldDataTypeConverter x:Key="fieldDataConverter"/>
+        <converters:NewFieldConverter x:Key="newFieldConverter"/>
+    </UserControl.Resources>
+
+    <Grid Margin="0,0,0,50">
+        <ListBox x:Name="fieldsListBox" ItemsSource="{Binding Fields, Mode=TwoWay}" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,45,0,-6">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel 
+                        Margin="5" 
+                        Orientation="Horizontal">
+                        <TextBox x:Name="fieldTitle"
+                                 Width="120" 
+                                 FontSize="12" 
+                                 VerticalContentAlignment="Center"
+                                 Padding="10,5,5,5"
+                                 Text="{Binding FieldTitle, Mode=TwoWay}"/>
+                        <ComboBox x:Name="fieldDataTypesList"
+                                  IsEnabled="False"
+                                  SelectedIndex="{
+                                        Binding DataType, 
+                                        Converter={StaticResource fieldDataConverter},
+                                        Mode=TwoWay}"
+                                  Width="80"
+                                  FontSize="12"
+                                  Margin="10,0,0,0"
+                                  VerticalContentAlignment="Center"
+                                  ItemsSource="{x:Static data:TypesContainer.Types}"/>
+                        <CheckBox x:Name="isFieldKey" 
+                                     Width="100" 
+                                     Height="24"
+                                     VerticalAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontSize="12"
+                                     Margin="10,0,0,0"
+                                     IsChecked="{Binding IsKey, Mode=TwoWay}"
+                                     Content="is key?"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Button x:Name="buttonAddField" 
+                Command="{Binding AddFieldCommand}" 
+                Content="Add field" 
+                Height="32"
+                Margin="220,2,0,320">
+            <Button.CommandParameter>
+                <MultiBinding Converter ="{StaticResource newFieldConverter}">
+                    <Binding Path="Text" ElementName="textboxNewFieldTitle"/>
+                    <Binding Path="SelectedIndex" ElementName="comboboxNewFieldType"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+        <Button x:Name="buttonRemoveSelectedField" 
+                Command="{Binding RemoveSelectedFieldCommand}"
+                CommandParameter="{Binding ElementName=fieldsListBox, Path=SelectedItem}"
+                Content="Remove selected field" 
+                Margin="170,375,0,-50"/>
+        <ComboBox x:Name="comboboxNewFieldType"
+                  SelectedIndex="0"
+                  ItemsSource="{x:Static data:TypesContainer.Types}"
+                  HorizontalAlignment="Left" 
+                  VerticalAlignment="Top" 
+                  VerticalContentAlignment="Center"
+                  Width="80" 
+                  Height="32" Margin="125,2,0,0"/>
+        <TextBox x:Name="textboxNewFieldTitle" 
+                 Width="120" 
+                 Height="32"
+                 FontSize="12" 
+                 VerticalContentAlignment="Center"
+                 Padding="10,5,5,5"
+                 Text="" 
+                 Margin="0,2,180,320"/>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,5 @@
+﻿enum UiFieldType
+{
+    TextBox,
+    DateTime
+}
