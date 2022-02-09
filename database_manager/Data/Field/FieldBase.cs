@@ -8,6 +8,7 @@ namespace database_manager.Data
         string title = "";
         object data;
         bool isKey = false;
+
         Type type = typeof(object);
         UiFieldType uiType;
         FieldDataType dataType;

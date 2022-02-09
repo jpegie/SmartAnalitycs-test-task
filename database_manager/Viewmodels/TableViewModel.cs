@@ -18,7 +18,7 @@ namespace database_manager.Viewmodels
         TableModel tableModel;
         public TableViewModel(TableModel tableModel)
         {
-            this.tableModel = tableModel;   
+            this.tableModel = tableModel; 
         }
         public string TableTitle
         {

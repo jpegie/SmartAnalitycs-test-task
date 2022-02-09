@@ -39,8 +39,8 @@ namespace database_manager
             TableViewModel tableViewModel = new TableViewModel(tableModel);
 
             this.TablesList.DataContext = mainViewModel;
-            this.ItemsList.DataContext = tableViewModel;    
-            this.FieldsList.DataContext = tableViewModel; 
+            this.ItemsList.DataContext = tableViewModel;
+            this.FieldsList.DataContext = tableViewModel;
         }
     }
 }

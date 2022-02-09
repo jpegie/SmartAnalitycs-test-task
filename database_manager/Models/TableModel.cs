@@ -10,8 +10,6 @@ namespace database_manager.Models
 {
     internal class TableModel : INotifyPropertyChanged
     {
-        //TODO: переместить ItemsUserControl в MainView и сделать заголовки
-        //TODO: забыл.
         ItemPattern itemPattern = new ItemPattern();
         ObservableCollection<Item> items = new ObservableCollection<Item>();
 
@@ -26,6 +24,10 @@ namespace database_manager.Models
         {
             get => items;
             set => items = value;
+        }
+        public ItemPattern ItemPattern
+        {
+            get => itemPattern;
         }
         public string TableTitle
         {
@@ -93,6 +95,7 @@ namespace database_manager.Models
         {
             items.RemoveAt((int)parameter);
             OnPropertyChanged("Items");
+            OnPropertyChanged("Headers");
         }
         public void AddField(object parameter)
         {
@@ -124,6 +127,7 @@ namespace database_manager.Models
 
             OnPropertyChanged("Items");
             OnPropertyChanged("Fields");
+            OnPropertyChanged("Headers");
         }
         public void RemoveField(object parameter)
         {
@@ -147,6 +151,7 @@ namespace database_manager.Models
             OnPropertyChanged("RemovedField");
             OnPropertyChanged("Items");
             OnPropertyChanged("Fields");
+            OnPropertyChanged("Headers");
         }
 
         public string RemovedField
