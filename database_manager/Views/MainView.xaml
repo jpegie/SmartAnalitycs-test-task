@@ -5,15 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:usercontrols="clr-namespace:database_manager.UserControls"
         mc:Ignorable="d"
-        Title="DB Tables Manager" Height="600" Width="1100" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+        Title="DB Tables Manager" 
+        Height="600" 
+        Width="1100" 
+        ResizeMode="NoResize" 
+        SizeToContent="WidthAndHeight">
     <Grid>
         <usercontrols:TablesListUserControl x:Name="TablesList" 
-                                            Margin="30,25,870,59"/>
+                                            Margin="35,50,865,30"/>
         <usercontrols:ItemsUserControl x:Name="ItemsList"
-                                       Margin="275,25,375,129"/>
+                                       Margin="275,50,375,104"/>
         <usercontrols:FieldsUserControl x:Name="FieldsList" 
                                         HorizontalAlignment="Left" 
-                                        Margin="750,25,0,0" 
-                                        VerticalAlignment="Top"/>
+                                        Margin="750,0,0,0" 
+                                        VerticalAlignment="Center"/>
+        <TextBox x:Name="textboxTableTitle" 
+                 HorizontalAlignment="Left" 
+                 Margin="750,50,0,0" 
+                 TextWrapping="Wrap" 
+                 Text="{Binding TableTitle, Mode=TwoWay}" 
+                 VerticalAlignment="Top"
+                 Width="300" 
+                 Height="35"/>
     </Grid>
 </Window>

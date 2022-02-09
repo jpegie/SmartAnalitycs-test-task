@@ -6,7 +6,37 @@
              xmlns:local="clr-namespace:database_manager.UserControls"
              mc:Ignorable="d" Width="200" Height="500">
     <Grid>
-        <ListBox x:Name="listboxTables" ItemsSource="{Binding Tables}" Margin="0,0,0,70"/>
-        <Button x:Name="buttonOpenSelectedTable" Content="Open selected table" HorizontalAlignment="Center" Margin="0,460,0,0" VerticalAlignment="Top" Height="40" Width="200"/>
+        <ListBox x:Name="listboxTables" ItemsSource="{Binding Tables}" Margin="0,0,0,110"/>
+        <Button x:Name="buttonOpenSelectedTable" 
+                Command="{Binding OpenSelectedTableCommand}"
+                CommandParameter="{Binding ElementName=listboxTables, Path=SelectedItem}"
+                IsEnabled="{Binding Connected}" 
+                Content="Open selected table" 
+                HorizontalAlignment="Left" 
+                Margin="0,405,0,0" 
+                VerticalAlignment="Top"
+                Height="40" 
+                Width="120"/>
+        <Button x:Name="buttonCreateTable" 
+                IsEnabled="{Binding Connected}" 
+                Command="{Binding CreateTableCommand}" 
+                CommandParameter="{Binding ElementName=newTableTitle, Path=Text}"
+                Content="Create table" 
+                HorizontalAlignment="Left" 
+                Margin="0,465,0,0" 
+                VerticalAlignment="Top" 
+                Height="35" 
+                Width="80"/>
+        <Button x:Name="buttonRemoveTable" 
+                IsEnabled="{Binding Connected}"
+                Command="{Binding RemoveSelectedTableCommand}" 
+                CommandParameter="{Binding ElementName=listboxTables, Path=SelectedItem}"
+                Content="Remove &#xD;&#xA;table" 
+                HorizontalAlignment="Left" 
+                Margin="125,405,0,0" 
+                VerticalAlignment="Top" 
+                Height="40" 
+                Width="75"/>
+        <TextBox x:Name="newTableTitle" HorizontalAlignment="Left" VerticalContentAlignment="Center" Padding="5" Margin="85,465,0,0" TextWrapping="Wrap" Text="new table title" VerticalAlignment="Top" Width="115" Height="35"/>
     </Grid>
 </UserControl>

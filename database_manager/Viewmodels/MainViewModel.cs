@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace database_manager.Viewmodels
 {
-    internal class MainViewModel
+    /*internal class MainViewModel
     {
         DataBaseModel dbModel;
         public MainViewModel(DataBaseModel dbModel)
@@ -18,6 +18,6 @@ namespace database_manager.Viewmodels
         {
             get => dbModel.Tables;
         }
-    }
+    }*/
     
 }

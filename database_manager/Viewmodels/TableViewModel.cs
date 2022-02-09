@@ -18,7 +18,7 @@ namespace database_manager.Viewmodels
         TableModel tableModel;
         public TableViewModel(TableModel tableModel)
         {
-            this.tableModel = tableModel; 
+            this.tableModel = tableModel;
         }
         public string TableTitle
         {
@@ -68,15 +68,6 @@ namespace database_manager.Viewmodels
                 return new RelayCommand<object[]>(tableModel.AddField);
             }
         }
-        /*public void RemoveColumnByTitle(string columnTitle)
-        {
-            tableModel.RemoveColumnByTitle(columnTitle);
-        }
-        public void AddColumn(Column column)
-        {
-            tableModel.AddColumn(column); 
-        }*/
-
     }
 
 }

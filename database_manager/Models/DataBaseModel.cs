@@ -6,10 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using database_manager.Data;
 using database_manager.Viewmodels;
+using Microsoft.Data.Sqlite;
+using System.IO;
+using System.Collections.ObjectModel;
 
 namespace database_manager.Models
 {
-    interface IDataBase
+   /* interface IDataBase
     {
         string DbTitle { get; }
         List<string> Tables { get; }
@@ -20,27 +23,54 @@ namespace database_manager.Models
         
         bool ClearDb();
         bool ClearTableByTitle(string tableTitle);
-    }
+    }*/
 
-    internal class DataBaseModel : IDataBase, INotifyPropertyChanged
+    internal class DataBaseModel : INotifyPropertyChanged
     {
-
+        bool connected = false;
         string dbTitle = "";
-        List<string> tables = new List<string>();
-        public DataBaseModel(string dbTitle)
+        string dataSource = "";
+        ObservableCollection<string> tables = new ObservableCollection<string>();
+        SqliteConnection connection;
+        public DataBaseModel()
         {
-            this.dbTitle = dbTitle;
+            this.dbTitle = DBinfo.Title;
+            this.dataSource = DBinfo.Source;
+            Connect();
             ParseTables();
         }
-
+        public bool Connected
+        {
+            get => connected;
+        }
         public string DbTitle
         {
             get => dbTitle;
         }
-
-        public List<string> Tables
+        public void Connect()
+        {
+            try
+            {
+                if (File.Exists(dataSource) == false)
+                {
+                    MessageDisplay.DisplayMessage($"Not found file : {dataSource}");
+                }
+                else
+                {
+                    connection = new SqliteConnection($"Data Source={dataSource}");
+                    connection.Open();
+                    connected = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageDisplay.DisplayException(ex);
+            }   
+        }
+        public ObservableCollection<string> Tables
         {
             get => tables;
+            set => tables = value;
         }
 
         #region INotifyPropertyChanged
@@ -54,74 +84,94 @@ namespace database_manager.Models
         }
         #endregion
 
-        public bool CreateTable(TableModel table)
+        public void ParseTables()
         {
-            try
+            if (connected)
             {
-                //TODO: запрос к БД на добавление таблицы
-                tables.Add(table.TableTitle);
-                OnPropertyChanged("Tables");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public bool ClearDb()
-        { 
-            try
-            {
-                //TODO: запрос к БД на удаление всех таблиц
-                tables.Clear();
-                OnPropertyChanged("Tables");
-                return true;
-            }
-            catch 
-            { 
-                return false; 
-            }
-        }
-
-        public bool ParseTables()
-        {
-            try
-            {
-                //TODO: запрос к БД на парсинг заголовков таблиц
-                for(int i = 0; i < 10; ++i)
+                try
                 {
-                    tables.Add($"table{i}");
+                    var command = connection.CreateCommand();
+                    command.CommandText =
+                    @$"
+                        SELECT name FROM sqlite_master WHERE type='table'
+                    ";
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tables.Add(reader.GetString(0));
+                        }
+                        OnPropertyChanged("Tables");
+                    }   
                 }
-                OnPropertyChanged("Tables");
-                return true;
-            }
-            catch 
-            { 
-                return false; 
+                catch (Exception ex)
+                {
+                    MessageDisplay.DisplayException(ex);
+                }
             }
             
         }
-
-        public bool RemoveTableByTitle(string tableTitle)
+        public void RemoveTableByTitle(object tableTitle)
         {
-            
             try
             {
-                //TODO: запрос к БД на удаление таблицы
-                tables.Remove(tableTitle);
-                OnPropertyChanged("Tables");
-                return true;
+                var command = connection.CreateCommand();
+                command.CommandText =@$"DROP TABLE {tableTitle.ToString()}";
+                var tablesRemoved = command.ExecuteNonQuery();
+                if (tablesRemoved > 0)
+                {
+                    tables.Remove(tableTitle.ToString());
+                    OnPropertyChanged("Tables");
+                }
             }
-            catch 
-            { 
-                return false; 
+            catch (Exception ex)
+            {
+                MessageDisplay.DisplayException(ex);
+            }
+        }
+        public void CreateTable(object tableTitle)
+        {
+            try
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = @$"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableTitle.ToString()}';";
+                object selectedTable = command.ExecuteScalar();
+                if (selectedTable == null)
+                {
+                    command.CommandText = @$"CREATE TABLE IF NOT EXISTS {tableTitle.ToString()} (ID INTEGER) ";
+                    command.ExecuteNonQuery();
+                    tables.Add(tableTitle.ToString());
+                    OnPropertyChanged("Tables");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageDisplay.DisplayException(ex);
             }
         }
 
-        public bool ClearTableByTitle(string tableTitle)
+        public List<string> ParseFieldsTitlesFromTable(string tableTitle)
         {
-            throw new NotImplementedException();
+            List<string> titles = new List<string>();
+            var command = connection.CreateCommand();
+            command.CommandText = @$"SELECT name FROM pragma_table_info('{tableTitle}') ORDER BY cid";
+            using(var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    titles.Add(reader.GetString(0));
+                }
+            }
+            return titles;
+        }
+        public List<Item>ParseItemsFromTable(string tableTitle)
+        {
+            List<Item> items = new List<Item>();
+            ParseFieldsTitlesFromTable(tableTitle);
+            var command = connection.CreateCommand();
+            command.CommandText = @$"SELECT ALL FROM {tableTitle} WHERE ";
+            return items;
+
         }
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using database_manager.Data;
-using static database_manager.Viewmodels.RelayCommands;
 
 namespace database_manager.Models
 {
@@ -12,12 +11,14 @@ namespace database_manager.Models
     {
         ItemPattern itemPattern = new ItemPattern();
         ObservableCollection<Item> items = new ObservableCollection<Item>();
+        DataBaseModel dbModel;
 
         string title = "";
         string keyFieldTitle = "";
 
-        public TableModel()
+        public TableModel(DataBaseModel dbModel)
         {
+            this.dbModel = dbModel;
             this.PropertyChanged += KeyListener.ListenRemovedField;
         }
         public ObservableCollection<Item> Items
@@ -154,6 +155,13 @@ namespace database_manager.Models
             OnPropertyChanged("Headers");
         }
 
+        public void OpenSelectedTable(object tableTitle)
+        {
+            if(tableTitle == null) return;
+            TableTitle = tableTitle.ToString();
+            //TODO: отправить запрос dbModel на парсинг items from table , а затем put it into view
+            dbModel.ParseFieldsTitlesFromTable(tableTitle.ToString());
+        }
         public string RemovedField
         { get; set; }
     }
