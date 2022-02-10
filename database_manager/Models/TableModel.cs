@@ -9,6 +9,8 @@ namespace database_manager.Models
 {
     internal class TableModel : INotifyPropertyChanged
     {
+        //TODO: добавить страничную навигацию в ItemsUserControl (подгружать по N записей, а не сразу все)
+
         ItemPattern itemPattern = new ItemPattern();
         ObservableCollection<Item> items = new ObservableCollection<Item>();
         DataBaseModel dbModel;
@@ -159,7 +161,7 @@ namespace database_manager.Models
         {
             if(tableTitle == null) return;
             TableTitle = tableTitle.ToString();
-            //TODO: отправить запрос dbModel на парсинг items from table , а затем put it into view
+            //TODO: отправить запрос dbModel на парсинг items from table, а затем put it into view
             dbModel.ParseFieldsTitlesFromTable(tableTitle.ToString());
         }
         public string RemovedField
