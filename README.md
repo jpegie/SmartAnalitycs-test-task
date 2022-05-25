@@ -1,0 +1,3 @@
+# SmartAnalitycs-TestTask
+
+Success.
